@@ -12,5 +12,10 @@ public class MyApplication extends BaseApplication {
         super.onCreate();
         ((LifecycleManager) getAppRuntime().getManager(AppRuntime.LIFECYCLE)).registerModule("com.lzp.module1.Module1Lifecycle");
         ((LifecycleManager) getAppRuntime().getManager(AppRuntime.LIFECYCLE)).registerModule("com.lzp.module2.Module2Lifecycle");
-                                    }
+    }
+
+    @Override
+    public AppRuntime createAppRuntime() {
+        return new AppRuntime();
+    }
 }

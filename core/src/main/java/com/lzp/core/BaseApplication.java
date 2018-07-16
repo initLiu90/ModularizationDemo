@@ -3,7 +3,7 @@ package com.lzp.core;
 import android.app.Application;
 
 public abstract class BaseApplication extends Application {
-    protected AppRuntime mAppRuntime;
+    private AppRuntime mAppRuntime;
     public static BaseApplication sApplication;
 
     public static BaseApplication getApplication() {
@@ -14,8 +14,10 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
-        mAppRuntime = new AppRuntime();
+        mAppRuntime = createAppRuntime();
     }
+
+    public abstract AppRuntime createAppRuntime();
 
     public AppRuntime getAppRuntime() {
         return mAppRuntime;
