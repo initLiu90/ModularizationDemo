@@ -9,11 +9,11 @@ import com.lzp.core.IModuleLifecycle;
 public class Module1Lifecycle implements IModuleLifecycle {
     @Override
     public void onCreate() {
-        ((ApiServiceManager) BaseApplication.sApplication.getAppRuntime().getManager(AppRuntime.API)).addApiService(IMode1.class, Mode1ServiceImpl.class);
+        ((ApiServiceManager) BaseApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).addApiService(IMode1.class, Mode1ServiceImpl.class);
     }
 
     @Override
     public void onStop() {
-        ((ApiServiceManager) BaseApplication.sApplication.getAppRuntime().getManager(AppRuntime.API)).removeApiService(IMode1.class);
+        ((ApiServiceManager) BaseApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).removeApiService(IMode1.class);
     }
 }

@@ -7,6 +7,7 @@ import com.lzp.core.manager.Manager;
 public class AppRuntime {
     public static final int LIFECYCLE = 0;
     public static final int API = LIFECYCLE + 1;
+    public static final int ACCOUNT = API + 1;
 
     private final ArrayMap<Integer, Manager> managers = new ArrayMap<>();
 
@@ -21,6 +22,9 @@ public class AppRuntime {
                 break;
             case API:
                 manager = new ApiServiceManagerImpl();
+                break;
+            case ACCOUNT:
+                manager = new AccountManagerImpl();
                 break;
         }
         if (manager != null) {

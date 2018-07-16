@@ -6,6 +6,10 @@ public abstract class BaseApplication extends Application {
     protected AppRuntime mAppRuntime;
     public static BaseApplication sApplication;
 
+    public static BaseApplication getApplication() {
+        return sApplication;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
