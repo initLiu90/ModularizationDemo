@@ -4,7 +4,7 @@ import android.app.Application;
 
 public abstract class BaseApplication extends Application {
     private AppRuntime mAppRuntime;
-    public static BaseApplication sApplication;
+    private static BaseApplication sApplication;
 
     public static BaseApplication getApplication() {
         return sApplication;
