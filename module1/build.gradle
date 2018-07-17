@@ -10,13 +10,6 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments = [ moduleName : project.getName() ]
-//                includeCompileClasspath = true
-//            }
-//        }
     }
 
     buildTypes {
@@ -29,8 +22,6 @@ android {
 }
 
 dependencies {
-    //    annotationProcessor project(':apt')
-    //    implementation project(':annotation')
     implementation project(':core')
     implementation project(':api')
 }
