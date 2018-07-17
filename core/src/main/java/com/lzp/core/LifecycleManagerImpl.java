@@ -3,6 +3,7 @@ package com.lzp.core;
 import android.support.v4.util.ArrayMap;
 
 import com.lzp.core.manager.LifecycleManager;
+import com.lzp.core.module.IModuleLifecycle;
 
 class LifecycleManagerImpl implements LifecycleManager {
     private ArrayMap<String, IModuleLifecycle> moduleLifecycles = new ArrayMap<>();

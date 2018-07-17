@@ -4,7 +4,7 @@ import com.lzp.core.AppRuntime;
 import com.lzp.core.manager.LifecycleManager;
 
 
-import com.lzp.core.BaseApplication;
+import com.lzp.core.base.BaseApplication;
 
 public class MyApplication extends BaseApplication {
     @Override

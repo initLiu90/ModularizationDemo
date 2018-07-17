@@ -1,4 +1,4 @@
-package com.lzp.core;
+package com.lzp.core.module;
 
 public interface IModuleLifecycle {
     void onCreate();

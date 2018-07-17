@@ -2,9 +2,9 @@ package com.lzp.module2;
 
 import com.lzp.api.module2.IMode2;
 import com.lzp.core.AppRuntime;
-import com.lzp.core.BaseApplication;
+import com.lzp.core.base.BaseApplication;
 import com.lzp.core.manager.ApiServiceManager;
-import com.lzp.core.IModuleLifecycle;
+import com.lzp.core.module.IModuleLifecycle;
 
 public class Module2Lifecycle implements IModuleLifecycle {
     @Override

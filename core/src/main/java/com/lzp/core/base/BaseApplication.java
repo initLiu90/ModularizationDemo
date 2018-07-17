@@ -1,10 +1,12 @@
-package com.lzp.core;
+package com.lzp.core.base;
 
 import android.app.Application;
 
+import com.lzp.core.AppRuntime;
+
 public abstract class BaseApplication extends Application {
     private AppRuntime mAppRuntime;
-    public static BaseApplication sApplication;
+    private static BaseApplication sApplication;
 
     public static BaseApplication getApplication() {
         return sApplication;
