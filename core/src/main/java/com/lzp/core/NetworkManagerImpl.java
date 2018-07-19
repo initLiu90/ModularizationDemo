@@ -44,7 +44,7 @@ public class NetworkManagerImpl implements NetworkManager {
     @Override
     public void registerNetMonitor() {
         MLog.i("Test", "NetworkManagerImpl", "regisetNetworkMonitorer sdk_int=" + Build.VERSION.SDK_INT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && mNetworkCallback == null) {
             ConnectivityManager manager = (ConnectivityManager) BaseApplication.getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkRequest.Builder builder = new NetworkRequest.Builder();
             mNetworkCallback = new MyNetworkCallback();
