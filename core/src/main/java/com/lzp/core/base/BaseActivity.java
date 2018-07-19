@@ -36,11 +36,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.getFragmentManager();
     }
 
+    /**
+     * 登录成功回调
+     */
     public void onLogin() {
 
     }
 
+    /**
+     * 退出登录回调
+     */
     public void onLogout() {
+
+    }
+
+    /**
+     * 无网络时回调
+     */
+    public void onNetworkClosed(){
 
     }
 }

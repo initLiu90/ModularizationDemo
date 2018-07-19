@@ -14,6 +14,7 @@ import java.util.List;
 public class AppRuntime {
     public static final int LIFECYCLE = 0;
     public static final int API = LIFECYCLE + 1;
+    public static final int NETWORK = API + 1;
 
     private final ArrayMap<Integer, Manager> managers = new ArrayMap<>();
     private List<BusinessObserver> mObservers = new ArrayList<>();
@@ -34,6 +35,9 @@ public class AppRuntime {
                 break;
             case API:
                 manager = new ApiServiceManagerImpl();
+                break;
+            case NETWORK:
+                manager = new NetworkManagerImpl();
                 break;
         }
         if (manager != null) {
@@ -90,6 +94,17 @@ public class AppRuntime {
         BaseActivity activity = ref == null ? null : ref.get();
         if (activity != null && !activity.isFinishing()) {
             activity.onLogout();
+        }
+    }
+
+    /**
+     * 通知当前栈顶Activity，无网络
+     */
+    public void onNetworkClosed() {
+        WeakReference<BaseActivity> ref = mApp.getActivitys().get(0);
+        BaseActivity activity = ref == null ? null : ref.get();
+        if (activity != null && !activity.isFinishing()) {
+            activity.onNetworkClosed();
         }
     }
 }

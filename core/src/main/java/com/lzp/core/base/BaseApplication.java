@@ -1,10 +1,16 @@
 package com.lzp.core.base;
 
 import android.app.Application;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
 import com.lzp.core.AppRuntime;
+import com.lzp.core.NetStateReceiver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -26,11 +32,13 @@ public abstract class BaseApplication extends Application {
         sApplication = this;
         setCrashHandler();
         mAppRuntime = createAppRuntime();
+        regisetNetworkMonitorer();
     }
 
     /**
      * 设置AppRuntime，
      * 默认实现为{@link AppRuntime}
+     *
      * @return
      */
     public abstract AppRuntime createAppRuntime();
@@ -38,6 +46,13 @@ public abstract class BaseApplication extends Application {
     public AppRuntime getAppRuntime() {
         return mAppRuntime;
     }
+
+    /**
+     * 是否需要监听网络变化
+     *
+     * @return
+     */
+    public abstract boolean monitoNetwork();
 
     /**
      * 设置UncaughtExceptionHandler，
@@ -68,6 +83,26 @@ public abstract class BaseApplication extends Application {
                 activity.finish();
             } else {
                 mActivitys.remove(i);
+            }
+        }
+    }
+
+    private void regisetNetworkMonitorer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (monitoNetwork()) {
+                ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                NetworkRequest.Builder builder = new NetworkRequest.Builder();
+                manager.registerNetworkCallback(builder.build(), new ConnectivityManager.NetworkCallback() {
+                    @Override
+                    public void onAvailable(Network network) {
+                        super.onAvailable(network);
+                    }
+
+                    @Override
+                    public void onLost(Network network) {
+                        super.onLost(network);
+                    }
+                });
             }
         }
     }
