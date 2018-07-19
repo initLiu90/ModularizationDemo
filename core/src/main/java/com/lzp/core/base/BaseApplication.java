@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class BaseApplication extends Application {
     private AppRuntime mAppRuntime;
     private static BaseApplication sApplication;
-    private List<WeakReference<BaseActivity>> mBackgroundActivitys = new ArrayList<>();
+    private List<WeakReference<BaseActivity>> mActivitys = new ArrayList<>();
     private Handler mHander = new Handler(Looper.getMainLooper());
 
     public static BaseApplication getApplication() {
@@ -24,24 +24,51 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
+        setCrashHandler();
         mAppRuntime = createAppRuntime();
     }
 
+    /**
+     * 设置AppRuntime，
+     * 默认实现为{@link AppRuntime}
+     * @return
+     */
     public abstract AppRuntime createAppRuntime();
 
     public AppRuntime getAppRuntime() {
         return mAppRuntime;
     }
 
+    /**
+     * 设置UncaughtExceptionHandler，
+     * 默认实现为{@link com.lzp.core.CrashHandler}
+     */
+    public abstract void setCrashHandler();
+
     void addBaseActivity(BaseActivity activity) {
-        mBackgroundActivitys.add(0, new WeakReference<BaseActivity>(activity));
+        mActivitys.add(0, new WeakReference<BaseActivity>(activity));
     }
 
     void removeBaseActivity(BaseActivity activity) {
-        mBackgroundActivitys.remove(new WeakReference<BaseActivity>(activity));
+        mActivitys.remove(new WeakReference<BaseActivity>(activity));
     }
 
-    // TODO: 2018/7/17 add finish all activity method
+    public List<WeakReference<BaseActivity>> getActivitys() {
+        return mActivitys;
+    }
 
-    // TODO: 2018/7/17 add exit method
+    public void closeAllActivity() {
+        int len = mActivitys.size();
+        for (int i = len; i >= 0; i--) {
+            WeakReference<BaseActivity> ref = mActivitys.get(i);
+            BaseActivity activity = ref == null ? null : ref.get();
+            if (activity == null) {
+                mActivitys.remove(i);
+            } else if (!activity.isFinishing()) {
+                activity.finish();
+            } else {
+                mActivitys.remove(i);
+            }
+        }
+    }
 }

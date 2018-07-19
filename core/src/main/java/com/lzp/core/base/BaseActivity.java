@@ -27,11 +27,20 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * use {@link BaseActivity#getSupportFragmentManager BaseActivity.getSupportFragmentManager()} instead
+     *
      * @return FragmentManager
      */
     @Deprecated
     @Override
     public FragmentManager getFragmentManager() {
         return super.getFragmentManager();
+    }
+
+    public void onLogin() {
+
+    }
+
+    public void onLogout() {
+
     }
 }
