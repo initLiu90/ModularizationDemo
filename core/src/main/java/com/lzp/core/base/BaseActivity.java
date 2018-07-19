@@ -1,6 +1,7 @@
 package com.lzp.core.base;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 无网络时回调
      */
     public void onNetworkClosed(){
+
+    }
+
+    /**
+     * 网络已连接
+     */
+    public void onNetworkConnected(){
 
     }
 }

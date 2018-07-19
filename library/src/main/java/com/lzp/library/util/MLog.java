@@ -17,9 +17,9 @@ public final class MLog {
      *            the class or activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int v(String tag, String msg) {
+    public static int v(String tag, String subTag, String msg) {
         if (mDebug) {
-            return Log.v(tag, msg);
+            return Log.v(tag, "[" + subTag + "] " + msg);
         }
         return 0;
     }
@@ -32,9 +32,9 @@ public final class MLog {
      * @param msg The message you would like logged.
      * @param tr  An exception to log
      */
-    public static int v(String tag, String msg, Throwable tr) {
+    public static int v(String tag, String subTag, String msg, Throwable tr) {
         if (mDebug) {
-            return Log.v(tag, msg, tr);
+            return Log.v(tag, "[" + subTag + "] " + msg, tr);
         }
         return 0;
     }
@@ -46,9 +46,9 @@ public final class MLog {
      *            the class or activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int d(String tag, String msg) {
+    public static int d(String tag, String subTag, String msg) {
         if (mDebug) {
-            return Log.d(tag, msg);
+            return Log.d(tag, "[" + subTag + "] " + msg);
         }
         return 0;
     }
@@ -61,9 +61,9 @@ public final class MLog {
      * @param msg The message you would like logged.
      * @param tr  An exception to log
      */
-    public static int d(String tag, String msg, Throwable tr) {
+    public static int d(String tag, String subTag, String msg, Throwable tr) {
         if (mDebug) {
-            return Log.d(tag, msg, tr);
+            return Log.d(tag, "[" + subTag + "] " + msg, tr);
         }
         return 0;
     }
@@ -75,9 +75,9 @@ public final class MLog {
      *            the class or activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int i(String tag, String msg) {
+    public static int i(String tag, String subTag, String msg) {
         if (mDebug) {
-            return Log.i(tag, msg);
+            return Log.i(tag, "[" + subTag + "] " + msg);
         }
         return 0;
     }
@@ -90,9 +90,9 @@ public final class MLog {
      * @param msg The message you would like logged.
      * @param tr  An exception to log
      */
-    public static int i(String tag, String msg, Throwable tr) {
+    public static int i(String tag, String subTag, String msg, Throwable tr) {
         if (mDebug) {
-            return Log.i(tag, msg, tr);
+            return Log.i(tag, "[" + subTag + "] " + msg, tr);
         }
         return 0;
     }
@@ -104,9 +104,9 @@ public final class MLog {
      *            the class or activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int w(String tag, String msg) {
+    public static int w(String tag, String subTag, String msg) {
         if (mDebug) {
-            return Log.w(tag, msg);
+            return Log.w(tag, "[" + subTag + "] " + msg);
         }
         return 0;
     }
@@ -119,9 +119,9 @@ public final class MLog {
      * @param msg The message you would like logged.
      * @param tr  An exception to log
      */
-    public static int w(String tag, String msg, Throwable tr) {
+    public static int w(String tag, String subTag, String msg, Throwable tr) {
         if (mDebug) {
-            return Log.w(tag, msg, tr);
+            return Log.w(tag, "[" + subTag + "] " + msg, tr);
         }
         return 0;
     }
@@ -132,7 +132,7 @@ public final class MLog {
      *        the class or activity where the log call occurs.
      * @param tr An exception to log
      */
-    public static int w(String tag, Throwable tr) {
+    public static int w(String tag, String subTag, Throwable tr) {
         if (mDebug) {
             return Log.w(tag, tr);
         }
@@ -146,9 +146,9 @@ public final class MLog {
      *            the class or activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int e(String tag, String msg) {
+    public static int e(String tag, String subTag, String msg) {
         if (mDebug) {
-            return Log.e(tag, msg);
+            return Log.e(tag, "[" + subTag + "] " + msg);
         }
         return 0;
     }
@@ -161,9 +161,9 @@ public final class MLog {
      * @param msg The message you would like logged.
      * @param tr  An exception to log
      */
-    public static int e(String tag, String msg, Throwable tr) {
+    public static int e(String tag, String subTag, String msg, Throwable tr) {
         if (mDebug) {
-            return Log.e(tag, msg, tr);
+            return Log.e(tag, "[" + subTag + "] " + msg, tr);
         }
         return 0;
     }
@@ -189,9 +189,9 @@ public final class MLog {
      * @param msg      The message you would like logged.
      * @return The number of bytes written.
      */
-    public static int println(int priority, String tag, String msg) {
+    public static int println(int priority, String tag, String subTag, String msg) {
         if (mDebug) {
-            Log.println(priority, tag, msg);
+            Log.println(priority, tag, "[" + subTag + "] " + msg);
         }
         return 0;
     }

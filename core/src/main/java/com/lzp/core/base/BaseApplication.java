@@ -10,13 +10,17 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.lzp.core.AppRuntime;
+import com.lzp.core.CrashHandler;
 import com.lzp.core.NetStateReceiver;
+import com.lzp.core.manager.NetworkManager;
+import com.lzp.library.util.MLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseApplication extends Application {
+    private static final String TAG = "BaseApplication";
     private AppRuntime mAppRuntime;
     private static BaseApplication sApplication;
     private List<WeakReference<BaseActivity>> mActivitys = new ArrayList<>();
@@ -30,9 +34,11 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
-        setCrashHandler();
+        Thread.setDefaultUncaughtExceptionHandler(getCrashHandler());
         mAppRuntime = createAppRuntime();
-        regisetNetworkMonitorer();
+        if (monitoNetwork()) {
+            ((NetworkManager) getAppRuntime().getManager(AppRuntime.NETWORK)).registerNetMonitor();
+        }
     }
 
     /**
@@ -58,7 +64,7 @@ public abstract class BaseApplication extends Application {
      * 设置UncaughtExceptionHandler，
      * 默认实现为{@link com.lzp.core.CrashHandler}
      */
-    public abstract void setCrashHandler();
+    public abstract CrashHandler getCrashHandler();
 
     void addBaseActivity(BaseActivity activity) {
         mActivitys.add(0, new WeakReference<BaseActivity>(activity));
@@ -83,26 +89,6 @@ public abstract class BaseApplication extends Application {
                 activity.finish();
             } else {
                 mActivitys.remove(i);
-            }
-        }
-    }
-
-    private void regisetNetworkMonitorer() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (monitoNetwork()) {
-                ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkRequest.Builder builder = new NetworkRequest.Builder();
-                manager.registerNetworkCallback(builder.build(), new ConnectivityManager.NetworkCallback() {
-                    @Override
-                    public void onAvailable(Network network) {
-                        super.onAvailable(network);
-                    }
-
-                    @Override
-                    public void onLost(Network network) {
-                        super.onLost(network);
-                    }
-                });
             }
         }
     }

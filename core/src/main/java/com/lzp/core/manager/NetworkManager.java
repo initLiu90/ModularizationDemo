@@ -9,4 +9,9 @@ public interface NetworkManager extends Manager {
      * @return 是否更新了状态
      */
     boolean updateConnectState(boolean connect);
+
+    /**
+     * api>=24时注册网络监听
+     */
+    void registerNetMonitor();
 }

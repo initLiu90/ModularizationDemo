@@ -79,8 +79,7 @@ public class AppRuntime {
      * 通知当前栈顶Activity，已登录
      */
     public void onLogin() {
-        WeakReference<BaseActivity> ref = mApp.getActivitys().get(0);
-        BaseActivity activity = ref == null ? null : ref.get();
+        BaseActivity activity = getTopActivity();
         if (activity != null && !activity.isFinishing()) {
             activity.onLogin();
         }
@@ -90,8 +89,7 @@ public class AppRuntime {
      * 通知当前栈顶Activity，已退出登录
      */
     public void onLogout() {
-        WeakReference<BaseActivity> ref = mApp.getActivitys().get(0);
-        BaseActivity activity = ref == null ? null : ref.get();
+        BaseActivity activity = getTopActivity();
         if (activity != null && !activity.isFinishing()) {
             activity.onLogout();
         }
@@ -101,10 +99,25 @@ public class AppRuntime {
      * 通知当前栈顶Activity，无网络
      */
     public void onNetworkClosed() {
-        WeakReference<BaseActivity> ref = mApp.getActivitys().get(0);
-        BaseActivity activity = ref == null ? null : ref.get();
+        BaseActivity activity = getTopActivity();
         if (activity != null && !activity.isFinishing()) {
             activity.onNetworkClosed();
         }
+    }
+
+    /**
+     * 通知当前栈顶Activity，网络已连接
+     */
+    public void onNetworkConnected() {
+        BaseActivity activity = getTopActivity();
+        if (activity != null && !activity.isFinishing()) {
+            activity.onNetworkConnected();
+        }
+    }
+
+    public BaseActivity getTopActivity() {
+        WeakReference<BaseActivity> ref = mApp.getActivitys().get(0);
+        BaseActivity activity = ref == null ? null : ref.get();
+        return activity;
     }
 }

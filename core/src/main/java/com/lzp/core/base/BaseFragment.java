@@ -10,9 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class BaseFragment extends Fragment {
+    protected BaseActivity mActivity;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (!(getActivity() instanceof BaseActivity)) {
+            throw new RuntimeException("Activity must extend from BaseActivity,current Activity is " + getActivity().getClass().getName());
+        }
+        mActivity = (BaseActivity) getActivity();
     }
 
     @Override
@@ -49,5 +55,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        mActivity = null;
     }
 }
