@@ -1,6 +1,7 @@
 package com.lzp.core;
 
 import com.lzp.core.manager.ApiServiceManager;
+import com.lzp.library.util.MLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ class ApiServiceManagerImpl implements ApiServiceManager {
         if (service != null) {
             return (T) service;
         }
+        MLog.e("Test", "ApiServiceManager", apiClz.getName() + " not find in apiservicemap");
         return null;
     }
 

@@ -13,7 +13,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 return;
             isCrashing = true;
         }
-        MLog.e("Test", "CrashHandler", "uncaughtException isCrashing=" + isCrashing);
+        MLog.e("Test", "CrashHandler", "uncaughtException", e);
 
         BaseApplication.getApplication().closeAllActivity();
         android.os.Process.killProcess(android.os.Process.myPid());

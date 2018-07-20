@@ -16,9 +16,8 @@ class LifecycleManagerImpl implements LifecycleManager {
             moduleLifecycle.onCreate();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     @Override
