@@ -80,7 +80,8 @@ public abstract class BaseApplication extends Application {
 
     public void closeAllActivity() {
         int len = mActivitys.size();
-        for (int i = len; i >= 0; i--) {
+        MLog.w("Test", "BaseApplication", "closeAllActivity len=" + len);
+        for (int i = len - 1; i >= 0; i--) {
             WeakReference<BaseActivity> ref = mActivitys.get(i);
             BaseActivity activity = ref == null ? null : ref.get();
             if (activity == null) {
