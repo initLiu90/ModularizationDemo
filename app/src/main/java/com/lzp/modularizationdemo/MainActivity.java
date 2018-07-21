@@ -1,15 +1,14 @@
 package com.lzp.modularizationdemo;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
-import com.lzp.api.module1.IMode1;
-import com.lzp.api.module2.IMode2;
+import com.lzp.api.login.ILogin;
 import com.lzp.core.AppRuntime;
 import com.lzp.core.base.BaseActivity;
+import com.lzp.core.base.BaseApplication;
 import com.lzp.core.manager.ApiServiceManager;
+import com.lzp.library.util.MLog;
 
 public class MainActivity extends BaseActivity {
 
@@ -26,10 +25,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void test() {
-        IMode1 api1 = ((ApiServiceManager) MyApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).getApiService(IMode1.class);
-        Log.e("Test", api1.getMode1Name());
-
-        IMode2 api2 = ((ApiServiceManager) MyApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).getApiService(IMode2.class);
-        Log.e("Test", api2.getSchool());
+        ILogin iLogin = ((ApiServiceManager) BaseApplication.getApplication()
+                .getAppRuntime()
+                .getManager(AppRuntime.API)).getApiService(ILogin.class);
+        if (!iLogin.isLogin()) {
+            iLogin.login(this);
+        } else {
+            MLog.e("Test", "MainActivity", "已登录 " + iLogin.getAccount());
+        }
     }
 }

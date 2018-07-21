@@ -1,0 +1,16 @@
+<resources>
+    <string name="login_app_name">login</string>
+    <string name="login_hit_account">手机号/邮箱</string>
+    <string name="login_hit_pwd">密码</string>
+    <string name="login_hit_phone">手机号</string>
+    <string name="login_hit_smscode">短信验证码</string>
+    <string name="login_hit_code">验证码</string>
+    <string name="login_login">登录</string>
+    <string name="login_sms_login">短信验证码登录</string>
+    <string name="login_jd_login">京东登录</string>
+    <string name="login_wx_login">微信登录</string>
+    <string name="login_registe">注册</string>
+    <string name="login_pwd_login">用户名密码登录</string>
+    <string name="login_get_smscode">获取短信验证码</string>
+    <string name="login_next">下一步</string>
+</resources>
