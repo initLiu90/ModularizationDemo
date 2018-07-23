@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        flatDir name: 'modularization', dir: '/Users/lillian/Workspace/Maven/modularization/libs'
+        flatDir name: 'modularization', dir: './Maven/modularization/libs'
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.1'
