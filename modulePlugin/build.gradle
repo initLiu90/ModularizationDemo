@@ -5,7 +5,7 @@ uploadArchives{
     repositories{
         flatDir{
             name "moduleplugin"
-            dir "/Users/lillian/Workspace/Maven/modularization/libs"
+            dir "../Maven/modularization/libs"
         }
     }
 }
