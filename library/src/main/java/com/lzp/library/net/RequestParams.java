@@ -7,9 +7,9 @@ import retrofit2.http.Url;
 
 public class RequestParams<R> {
     public final String httpMethod;
-    public final long connectTimeout;
-    public final long readTimeout;
-    public final long writeTimeout;
+//    public final long connectTimeout;
+//    public final long readTimeout;
+//    public final long writeTimeout;
     public final String url;
     public final Map<String, String> headers;
     public final Map<String, String> params;
@@ -17,14 +17,18 @@ public class RequestParams<R> {
 
     public RequestParams(Builder builder) {
         this.httpMethod = builder.httpMethod;
-        this.connectTimeout = builder.connectTimeout;
-        this.readTimeout = builder.readTimeout;
-        this.writeTimeout = builder.writeTimeout;
+//        this.connectTimeout = builder.connectTimeout;
+//        this.readTimeout = builder.readTimeout;
+//        this.writeTimeout = builder.writeTimeout;
         this.url = builder.url;
         this.headers = builder.headers;
         this.params = builder.params;
         this.converter = builder.converter;
     }
+
+
+
+
 
     public static class Builder<R> {
         private String httpMethod;
@@ -53,71 +57,71 @@ public class RequestParams<R> {
          * @param httpMethod {@link HttpMethod}
          * @return
          */
-        public Builder method(String httpMethod) {
+        public Builder<R> method(String httpMethod) {
             this.httpMethod = httpMethod;
             return this;
         }
 
-        public Builder addHeader(String key, String value) {
+        public Builder<R> addHeader(String key, String value) {
             headers.put(key, value);
             return this;
         }
 
-        public Builder addHeader(Map<String, String> headers) {
+        public Builder<R> addHeader(Map<String, String> headers) {
             this.headers.putAll(headers);
             return this;
         }
 
-        public Builder addParam(String key, String value) {
+        public Builder<R> addParam(String key, String value) {
             this.params.put(key, value);
             return this;
         }
 
-        public Builder addParam(Map<String, String> params) {
+        public Builder<R> addParam(Map<String, String> params) {
             this.params.putAll(params);
             return this;
         }
 
-        /**
-         * 建立连接超时时间
-         *
-         * @param connectTimeout Millisecond
-         * @return
-         */
-        public Builder connectTimeout(long connectTimeout) {
-            this.connectTimeout = connectTimeout;
-            return this;
-        }
+//        /**
+//         * 建立连接超时时间
+//         *
+//         * @param connectTimeout Millisecond
+//         * @return
+//         */
+//        public Builder<R> connectTimeout(long connectTimeout) {
+//            this.connectTimeout = connectTimeout;
+//            return this;
+//        }
+//
+//        /**
+//         * @param readTimeout Millisecond
+//         * @return
+//         */
+//        public Builder<R> readTimeout(long readTimeout) {
+//            this.readTimeout = readTimeout;
+//            return this;
+//        }
+//
+//        /**
+//         * @param writeTimeout Millisecond
+//         * @return
+//         */
+//        public Builder<R> writeTimeout(long writeTimeout) {
+//            this.writeTimeout = writeTimeout;
+//            return this;
+//        }
 
-        /**
-         * @param readTimeout Millisecond
-         * @return
-         */
-        public Builder readTimeout(long readTimeout) {
-            this.readTimeout = readTimeout;
-            return this;
-        }
-
-        /**
-         * @param writeTimeout Millisecond
-         * @return
-         */
-        public Builder writeTimeout(long writeTimeout) {
-            this.writeTimeout = writeTimeout;
-            return this;
-        }
-
-        public Builder url(String url) {
+        public Builder<R> url(String url) {
             this.url = url;
             return this;
         }
 
-        public Builder converter(Convert<? super R> converter) {
+        public Builder<R> converter(Convert<? super R> converter) {
             this.converter = converter;
             return this;
         }
 
-        public RequestParams build() {
+        public RequestParams<R> build() {
             return new RequestParams(this);
         }
     }

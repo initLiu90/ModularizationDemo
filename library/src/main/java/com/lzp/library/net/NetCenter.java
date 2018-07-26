@@ -18,11 +18,11 @@ public class NetCenter {
     private Retrofit mRetrofit;
     private ApiService mApiService;
 
-    public static NetCenter getInstance(Config config) {
+    public static NetCenter getInstance() {
         if (sInstance == null) {
             synchronized (NetCenter.class) {
                 if (sInstance == null) {
-                    sInstance = new NetCenter(config);
+                    sInstance = new NetCenter();
                 }
             }
         }
@@ -30,13 +30,10 @@ public class NetCenter {
     }
 
     private NetCenter() {
-    }
-
-    private NetCenter(Config config) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(config.connectTimeout, TimeUnit.MILLISECONDS)
-                .readTimeout(config.readTimeout, TimeUnit.MILLISECONDS)
-                .writeTimeout(config.writeTimeout, TimeUnit.MILLISECONDS)
+                .connectTimeout(Config.connectTimeout, TimeUnit.MILLISECONDS)
+                .readTimeout(Config.readTimeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(Config.writeTimeout, TimeUnit.MILLISECONDS)
                 .build();
         okHttpClient.dispatcher().setMaxRequests(okHttpClient.dispatcher().getMaxRequests() * 2);
         okHttpClient.dispatcher().setMaxRequestsPerHost(okHttpClient.dispatcher().getMaxRequestsPerHost() * 2);
@@ -45,11 +42,20 @@ public class NetCenter {
         mRetrofit = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
+                //接口中通过@url指定了请求地址，所以这里baseurl没有用了，但是为了避免
+                //Retrofit.java
+                //public Retrofit build() {
+                //      if (baseUrl == null) {
+                //        throw new IllegalStateException("Base URL required.");
+                //      }
+                //  .....
+                //}
+                .baseUrl("http://square.github.io")
                 .build();
         mApiService = mRetrofit.create(ApiService.class);
     }
 
-    public <R> Observable<R> createObservable(final RequestParams params) {
+    public <R> Observable<R> getApiService(final RequestParams<? super R> params) {
         Observable<ResponseBody> observable = null;
 
         if (RequestParams.HttpMethod.GET.equals(params.httpMethod)) {//get
@@ -69,11 +75,11 @@ public class NetCenter {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static class Config {
-        public long connectTimeout = 10 * 1000;
+    private static class Config {
+        public static long connectTimeout = 10 * 1000;
 
-        public long readTimeout = 10 * 1000;
+        public static long readTimeout = 10 * 1000;
 
-        public long writeTimeout = 10 * 1000;
+        public static long writeTimeout = 10 * 1000;
     }
 }
