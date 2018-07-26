@@ -9,9 +9,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetCenter {
     private volatile static NetCenter sInstance;
@@ -55,7 +57,7 @@ public class NetCenter {
         mApiService = mRetrofit.create(ApiService.class);
     }
 
-    public <R> Observable<R> getApiService(final RequestParams<? super R> params) {
+    public <R> Observable<R> getApiService(final RequestParams<?, ? super R> params) {
         Observable<ResponseBody> observable = null;
 
         if (RequestParams.HttpMethod.GET.equals(params.httpMethod)) {//get
@@ -69,7 +71,7 @@ public class NetCenter {
                 .map(new Function<ResponseBody, R>() {
                     @Override
                     public R apply(ResponseBody responseBody) throws Exception {
-                        return (R) params.converter.convert(responseBody.bytes());
+                        return (R) params.converter.responseBodyConvert(responseBody.bytes());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());

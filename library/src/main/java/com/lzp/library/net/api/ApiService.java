@@ -3,7 +3,9 @@ package com.lzp.library.net.api;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -19,4 +21,7 @@ public interface ApiService {
     @FormUrlEncoded
     @POST
     <R> Observable<ResponseBody> post(@Url String url, @HeaderMap Map<String, String> headers, @FieldMap Map<String, String> fields);
+
+    @POST
+    <R> Observable<ResponseBody> post(@Url String url, @HeaderMap Map<String, String> headers, @Body RequestBody request);
 }
