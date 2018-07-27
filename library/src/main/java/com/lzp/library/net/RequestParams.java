@@ -8,7 +8,8 @@ public class RequestParams<F, T> {
     public final String url;
     public final Map<String, String> headers;
     public final Map<String, String> params;
-    public final Convert<? super F, ? super T> converter;
+    public final String contentType;
+    public final Converter<? super F, ? super T> converter;
 
     public RequestParams(Builder builder) {
         this.httpMethod = builder.httpMethod;
@@ -16,6 +17,7 @@ public class RequestParams<F, T> {
         this.headers = builder.headers;
         this.params = builder.params;
         this.converter = builder.converter;
+        this.contentType = builder.contentType;
     }
 
 
@@ -26,6 +28,7 @@ public class RequestParams<F, T> {
         private String url;
 
         private Convert<? super F, ? super T> converter;
+        private String contentType = ContentType.APPLICATION_FORM_URLENCODED;
 
         public Builder(String url, String httpMethod) {
             this.url = url;
@@ -69,6 +72,11 @@ public class RequestParams<F, T> {
             return this;
         }
 
+        public Builder<F, T> contentType(String contentType) {
+            this.contentType = contentType;
+            return this;
+        }
+
         public Builder<F, T> converter(Convert<? super F, ? super T> converter) {
             this.converter = converter;
             return this;
@@ -82,5 +90,10 @@ public class RequestParams<F, T> {
     public interface HttpMethod {
         String GET = "Get";
         String POST = "Post";
+    }
+
+    public interface ContentType {
+        String APPLICATION_JSON = "application/json; charset=UTF-8";
+        String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded";
     }
 }

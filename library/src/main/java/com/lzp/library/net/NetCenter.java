@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -62,8 +63,13 @@ public class NetCenter {
 
         if (RequestParams.HttpMethod.GET.equals(params.httpMethod)) {//get
             observable = mApiService.get(params.url, params.headers, params.params);
-        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)) {//post
+        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
+                &&RequestParams.ContentType.APPLICATION_FORM_URLENCODED.equals(params.contentType)) {//post application/x-www-form-urlencoded
             observable = mApiService.post(params.url, params.headers, params.params);
+        }else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
+                &&RequestParams.ContentType.APPLICATION_JSON.equals(params.contentType)){//post application/json
+            RequestBody.create(MediaType.parse(params.contentType),params.converter.requestConvert(params.params));
+
         }
 
         return observable.subscribeOn(Schedulers.io())
