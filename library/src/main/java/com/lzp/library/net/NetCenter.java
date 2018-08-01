@@ -2,19 +2,11 @@ package com.lzp.library.net;
 
 import com.lzp.library.net.api.ApiService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
@@ -69,20 +61,26 @@ public class NetCenter {
     }
 
     public <T, R> Observable<R> getApiService(final RequestParams<T, R> params) {
-        Observable<ResponseBody> apiObservable = null;
-        if (RequestParams.HttpMethod.GET.equals(params.httpMethod)) {//get
-            apiObservable = mApiService.get(params.url, params.headers, params.params);
-        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
-                && RequestParams.ContentType.APPLICATION_FORM_URLENCODED.equals(params.contentType)) {//post application/x-www-form-urlencoded
-            apiObservable = mApiService.post(params.url, params.headers, params.params);
-        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
-                && RequestParams.ContentType.APPLICATION_JSON.equals(params.contentType)) {//post application/json
-            RequestBody requestBody = RequestBody.create(MediaType.parse(params.contentType), params.converter.requestConvert(params.requestBody));
-            apiObservable = mApiService.post(params.url, params.headers, requestBody);
-        }
-
-        return apiObservable.subscribeOn(Schedulers.io())
+        Observable<R> observable = Observable.just(0)
+                .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
+                .flatMap(new Function<Integer, ObservableSource<ResponseBody>>() {
+                    @Override
+                    public ObservableSource<ResponseBody> apply(Integer integer) throws Exception {
+                        Observable<ResponseBody> apiObservable = null;
+                        if (RequestParams.HttpMethod.GET.equals(params.httpMethod)) {//get
+                            apiObservable = mApiService.get(params.url, params.headers, params.params);
+                        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
+                                && RequestParams.ContentType.APPLICATION_FORM_URLENCODED.equals(params.contentType)) {//post application/x-www-form-urlencoded
+                            apiObservable = mApiService.post(params.url, params.headers, params.params);
+                        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
+                                && RequestParams.ContentType.APPLICATION_JSON.equals(params.contentType)) {//post application/json
+                            RequestBody requestBody = RequestBody.create(MediaType.parse(params.contentType), params.converter.requestConvert(params.requestBody));
+                            apiObservable = mApiService.post(params.url, params.headers, requestBody);
+                        }
+                        return apiObservable;
+                    }
+                })
                 .map(new Function<ResponseBody, R>() {
                     @Override
                     public R apply(ResponseBody responseBody) throws Exception {
@@ -90,6 +88,7 @@ public class NetCenter {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
+        return observable;
     }
 
 

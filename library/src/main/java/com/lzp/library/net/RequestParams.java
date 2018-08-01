@@ -5,6 +5,11 @@ import android.text.TextUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @param <I> 外界传入的请求参数类型
+ * @param <O> http response返回的数据类型经过{@link Converter#responseConvert(byte[])}转换后的类型
+ */
 public class RequestParams<I, O> {
     public final String httpMethod;
     public final String url;
@@ -47,6 +52,7 @@ public class RequestParams<I, O> {
         }
 
         /**
+         * http请求类型{@link HttpMethod}
          * @param httpMethod {@link HttpMethod}
          * @return
          */
@@ -75,21 +81,40 @@ public class RequestParams<I, O> {
             return this;
         }
 
+        /**
+         * post表单需要提交的原始数据
+         * @param requestBody
+         * @return
+         */
         public Builder<I, O> requestBody(I requestBody) {
             this.requestBody = requestBody;
             return this;
         }
 
+        /**
+         * 请求地址
+         * @param url
+         * @return
+         */
         public Builder<I, O> url(String url) {
             this.url = url;
             return this;
         }
 
+        /**
+         * 请求类型 {@link ContentType}
+         * @param contentType {@link ContentType}
+         * @return
+         */
         public Builder<I, O> contentType(String contentType) {
             this.contentType = contentType;
             return this;
         }
 
+        /**
+         * create Requestparams
+         * @return
+         */
         public RequestParams<I, O> build() {
             if (TextUtils.isEmpty(url))
                 throw new RuntimeException("url should not be null");
