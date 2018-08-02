@@ -60,8 +60,8 @@ public class NetCenter {
         mApiService = mRetrofit.create(ApiService.class);
     }
 
-    public <T, R> Observable<R> getApiService(final RequestParams<T, R> params) {
-        Observable<R> observable = Observable.just(0)
+    public <T> Observable<T> getApiService(final RequestParams<T> params) {
+        Observable<T> observable = Observable.just(0)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .flatMap(new Function<Integer, ObservableSource<ResponseBody>>() {
@@ -75,16 +75,16 @@ public class NetCenter {
                             apiObservable = mApiService.post(params.url, params.headers, params.params);
                         } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
                                 && RequestParams.ContentType.APPLICATION_JSON.equals(params.contentType)) {//post application/json
-                            RequestBody requestBody = RequestBody.create(MediaType.parse(params.contentType), params.converter.requestConvert(params.requestBody));
+                            RequestBody requestBody = RequestBody.create(MediaType.parse(params.contentType), params.converter.requestConvert(params.params));
                             apiObservable = mApiService.post(params.url, params.headers, requestBody);
                         }
                         return apiObservable;
                     }
                 })
-                .map(new Function<ResponseBody, R>() {
+                .map(new Function<ResponseBody, T>() {
                     @Override
-                    public R apply(ResponseBody responseBody) throws Exception {
-                        return (R) params.converter.responseConvert(responseBody.bytes());
+                    public T apply(ResponseBody responseBody) throws Exception {
+                        return (T) params.converter.responseConvert(responseBody.bytes());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());

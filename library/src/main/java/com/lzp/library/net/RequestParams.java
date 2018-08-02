@@ -7,44 +7,40 @@ import java.util.Map;
 
 /**
  *
- * @param <I> 外界传入的请求参数类型
- * @param <O> http response返回的数据类型经过{@link Converter#responseConvert(byte[])}转换后的类型
+ * @param <T> http response返回的数据类型经过{@link Converter#responseConvert(byte[])}转换后的类型
  */
-public class RequestParams<I, O> {
+public class RequestParams<T> {
     public final String httpMethod;
     public final String url;
     public final Map<String, String> headers;
     public final Map<String, String> params;
     public final String contentType;
-    public final Converter<? super I, ? super O> converter;
-    public final I requestBody;
+    public final Converter<? super T> converter;
 
-    public RequestParams(Builder<I, O> builder) {
+    public RequestParams(Builder<T> builder) {
         this.httpMethod = builder.httpMethod;
         this.url = builder.url;
         this.headers = builder.headers;
         this.params = builder.params;
         this.converter = builder.converter;
         this.contentType = builder.contentType;
-        this.requestBody = builder.requestBody;
     }
 
 
-    public static <I, O> Builder<I, O> creat(Converter<I, O> converter) {
+    public static <T> Builder<T> creat(Converter<T> converter) {
         return new Builder<>(converter);
     }
 
-    public static class Builder<I, O> {
+    public static class Builder<T> {
         private String httpMethod;
         private Map<String, String> headers = new HashMap<>();
         private Map<String, String> params = new HashMap<>();
         private String url;
 
-        private Converter<? super I, ? super O> converter;
+        private Converter<? super T> converter;
         private String contentType = ContentType.APPLICATION_FORM_URLENCODED;
-        private I requestBody;
 
-        private Builder(Converter<? super I, ? super O> converter) {
+        private Builder(Converter<? super T> converter) {
             this.converter = converter;
         }
 
@@ -56,38 +52,28 @@ public class RequestParams<I, O> {
          * @param httpMethod {@link HttpMethod}
          * @return
          */
-        public Builder<I, O> method(String httpMethod) {
+        public Builder<T> method(String httpMethod) {
             this.httpMethod = httpMethod;
             return this;
         }
 
-        public Builder<I, O> addHeader(String key, String value) {
+        public Builder<T> addHeader(String key, String value) {
             headers.put(key, value);
             return this;
         }
 
-        public Builder<I, O> addHeader(Map<String, String> headers) {
+        public Builder<T> addHeader(Map<String, String> headers) {
             this.headers.putAll(headers);
             return this;
         }
 
-        public Builder<I, O> addParam(String key, String value) {
+        public Builder<T> addParam(String key, String value) {
             this.params.put(key, value);
             return this;
         }
 
-        public Builder<I, O> addParam(Map<String, String> params) {
+        public Builder<T> addParam(Map<String, String> params) {
             this.params.putAll(params);
-            return this;
-        }
-
-        /**
-         * post表单需要提交的原始数据
-         * @param requestBody
-         * @return
-         */
-        public Builder<I, O> requestBody(I requestBody) {
-            this.requestBody = requestBody;
             return this;
         }
 
@@ -96,7 +82,7 @@ public class RequestParams<I, O> {
          * @param url
          * @return
          */
-        public Builder<I, O> url(String url) {
+        public Builder<T> url(String url) {
             this.url = url;
             return this;
         }
@@ -106,7 +92,7 @@ public class RequestParams<I, O> {
          * @param contentType {@link ContentType}
          * @return
          */
-        public Builder<I, O> contentType(String contentType) {
+        public Builder<T> contentType(String contentType) {
             this.contentType = contentType;
             return this;
         }
@@ -115,7 +101,7 @@ public class RequestParams<I, O> {
          * create Requestparams
          * @return
          */
-        public RequestParams<I, O> build() {
+        public RequestParams<T> build() {
             if (TextUtils.isEmpty(url))
                 throw new RuntimeException("url should not be null");
             if (TextUtils.isEmpty(httpMethod))
