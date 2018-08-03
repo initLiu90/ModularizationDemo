@@ -44,7 +44,6 @@ public class NetCenter {
 
 
         mRetrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 //接口中通过@url指定了请求地址，所以这里baseurl没有用了，但是为了避免
@@ -60,35 +59,8 @@ public class NetCenter {
         mApiService = mRetrofit.create(ApiService.class);
     }
 
-    public <T> Observable<T> getApiService(final RequestParams<T> params) {
-        Observable<T> observable = Observable.just(0)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .flatMap(new Function<Integer, ObservableSource<ResponseBody>>() {
-                    @Override
-                    public ObservableSource<ResponseBody> apply(Integer integer) throws Exception {
-                        Observable<ResponseBody> apiObservable = null;
-                        if (RequestParams.HttpMethod.GET.equals(params.httpMethod)) {//get
-                            apiObservable = mApiService.get(params.url, params.headers, params.params);
-                        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
-                                && RequestParams.ContentType.APPLICATION_FORM_URLENCODED.equals(params.contentType)) {//post application/x-www-form-urlencoded
-                            apiObservable = mApiService.post(params.url, params.headers, params.params);
-                        } else if (RequestParams.HttpMethod.POST.equals(params.httpMethod)
-                                && RequestParams.ContentType.APPLICATION_JSON.equals(params.contentType)) {//post application/json
-                            RequestBody requestBody = RequestBody.create(MediaType.parse(params.contentType), params.converter.requestConvert(params.params));
-                            apiObservable = mApiService.post(params.url, params.headers, requestBody);
-                        }
-                        return apiObservable;
-                    }
-                })
-                .map(new Function<ResponseBody, T>() {
-                    @Override
-                    public T apply(ResponseBody responseBody) throws Exception {
-                        return (T) params.converter.responseConvert(responseBody.bytes());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread());
-        return observable;
+    public <T> ObservableNet<T> getApiService(final RequestParams<T> params) {
+        return new ObservableNet<>(mApiService, params);
     }
 
 

@@ -31,6 +31,10 @@ public class RequestParams<T> {
         return new Builder<>(converter);
     }
 
+    public static <T> Builder<T> creat(Class<T> responseClazz) {
+        return new Builder<>();
+    }
+
     public static class Builder<T> {
         private String httpMethod;
         private Map<String, String> headers = new HashMap<>();
