@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  *
- * @param <T> http response返回的数据类型经过{@link Converter#responseConvert(byte[])}转换后的类型
+ * @param <T> 期望把http response转换后的类型
  */
 public class RequestParams<T> {
     public final String httpMethod;
@@ -15,20 +15,13 @@ public class RequestParams<T> {
     public final Map<String, String> headers;
     public final Map<String, String> params;
     public final String contentType;
-    public final Converter<? super T> converter;
 
     public RequestParams(Builder<T> builder) {
         this.httpMethod = builder.httpMethod;
         this.url = builder.url;
         this.headers = builder.headers;
         this.params = builder.params;
-        this.converter = builder.converter;
         this.contentType = builder.contentType;
-    }
-
-
-    public static <T> Builder<T> creat(Converter<T> converter) {
-        return new Builder<>(converter);
     }
 
     public static <T> Builder<T> creat(Class<T> responseClazz) {
@@ -41,12 +34,7 @@ public class RequestParams<T> {
         private Map<String, String> params = new HashMap<>();
         private String url;
 
-        private Converter<? super T> converter;
         private String contentType = ContentType.APPLICATION_FORM_URLENCODED;
-
-        private Builder(Converter<? super T> converter) {
-            this.converter = converter;
-        }
 
         private Builder() {
         }
