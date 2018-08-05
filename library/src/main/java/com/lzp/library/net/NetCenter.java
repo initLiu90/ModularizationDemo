@@ -4,18 +4,9 @@ import com.lzp.library.net.api.ApiService;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetCenter {
     private volatile static NetCenter sInstance;
@@ -34,17 +25,20 @@ public class NetCenter {
     }
 
     private NetCenter() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLogger());
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(Config.connectTimeout, TimeUnit.MILLISECONDS)
                 .readTimeout(Config.readTimeout, TimeUnit.MILLISECONDS)
                 .writeTimeout(Config.writeTimeout, TimeUnit.MILLISECONDS)
+                .addNetworkInterceptor(loggingInterceptor)
                 .build();
         okHttpClient.dispatcher().setMaxRequests(okHttpClient.dispatcher().getMaxRequests() * 2);
         okHttpClient.dispatcher().setMaxRequestsPerHost(okHttpClient.dispatcher().getMaxRequestsPerHost() * 2);
 
 
         mRetrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 //接口中通过@url指定了请求地址，所以这里baseurl没有用了，但是为了避免
                 //Retrofit.java

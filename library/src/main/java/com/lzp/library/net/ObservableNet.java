@@ -45,7 +45,7 @@ public class ObservableNet<T> extends Observable<T> implements Disposable {
 
     @Override
     protected void subscribeActual(Observer<? super T> observer) {
-        Log.e("Test", "subscribeActual=" + Thread.currentThread().getName());
+//        Log.e("Test", "subscribeActual=" + Thread.currentThread().getName());
         if (!check(observer)) {
             return;
         }
