@@ -19,6 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.lzp.core.base.** {*;}
 -keep class com.lzp.core.manager.** {*;}
 -keep class com.lzp.core.module.IModuleLifecycle {*;}
 -keep class com.lzp.core.observer.** {*;}
