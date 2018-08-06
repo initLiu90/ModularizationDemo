@@ -22,11 +22,12 @@ import retrofit2.Response;
 /**
  * 用法
  * ObservableNet.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    .....
-                }
+ * .unsubscribeOn(Schedulers.io())
+ * .observeOn(AndroidSchedulers.mainThread())
+ * .subscribe(new Observer<String>() {
+ * .....
+ * }
+ *
  * @param <T>
  */
 public class ObservableNet<T> extends Observable<T> implements Disposable {
@@ -35,6 +36,8 @@ public class ObservableNet<T> extends Observable<T> implements Disposable {
     private Function<? super byte[], ? super T> mResponseConvert;
     private Function<Map<String, String>, byte[]> mRequestConvert;
     private Observer<? super T> mObserver;
+
+    private Call<ResponseBody> mCall;
 
     private final AtomicBoolean unsubscribed = new AtomicBoolean();
 
@@ -51,23 +54,26 @@ public class ObservableNet<T> extends Observable<T> implements Disposable {
         }
 
         mObserver = observer;
-        observer = null;
         try {
-            Call<ResponseBody> call = null;
             if (RequestParams.HttpMethod.GET.equals(mRequestParams.httpMethod)) {//get
-                call = mApiService.get(mRequestParams.url, mRequestParams.headers, mRequestParams.params);
+                mCall = mApiService.get(mRequestParams.url, mRequestParams.headers, mRequestParams.params);
             } else if (RequestParams.HttpMethod.POST.equals(mRequestParams.httpMethod)
                     && RequestParams.ContentType.APPLICATION_FORM_URLENCODED.equals(mRequestParams.contentType)) {//post application/x-www-form-urlencoded
-                call = mApiService.post(mRequestParams.url, mRequestParams.headers, mRequestParams.params);
+                mCall = mApiService.post(mRequestParams.url, mRequestParams.headers, mRequestParams.params);
             } else if (RequestParams.HttpMethod.POST.equals(mRequestParams.httpMethod)
                     && RequestParams.ContentType.APPLICATION_JSON.equals(mRequestParams.contentType)) {//post application/json
-                RequestBody requestBody = RequestBody.create(MediaType.parse(mRequestParams.contentType), mRequestConvert.apply(mRequestParams.params));
-                call = mApiService.post(mRequestParams.url, mRequestParams.headers, requestBody);
+                RequestBody requestBody = RequestBody.create(MediaType.parse(mRequestParams.contentType), mRequestConvert
+                        .apply(mRequestParams.params));
+                mCall = mApiService.post(mRequestParams.url, mRequestParams.headers, requestBody);
+            } else {
+                mObserver.onSubscribe(Disposables.empty());
+                mObserver.onError(new IllegalStateException("UnSupported request method:" + mRequestParams.httpMethod + " or request contentType:" + mRequestParams.contentType));
+                return;
             }
 
             mObserver.onSubscribe(this);
 
-            Response<ResponseBody> response = call.execute();
+            Response<ResponseBody> response = mCall.execute();
             if (!isDisposed()) {
                 T data = (T) mResponseConvert.apply(response.body().bytes());
                 mObserver.onNext(data);
@@ -93,6 +99,7 @@ public class ObservableNet<T> extends Observable<T> implements Disposable {
 
     /**
      * convert http response
+     *
      * @param function
      * @return
      */
@@ -105,6 +112,8 @@ public class ObservableNet<T> extends Observable<T> implements Disposable {
     public void dispose() {
         if (unsubscribed.compareAndSet(false, true)) {
             mObserver = null;
+            mCall.cancel();
+            mCall = null;
         }
     }
 
