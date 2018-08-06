@@ -34,7 +34,7 @@ install {
             project {
                 packaging 'aar'
                 //项目描述，随意填
-                name 'Input text with fireworks.'
+                name 'modularization'
 //                url siteUrl
                 licenses {
                     license {
@@ -71,11 +71,11 @@ bintray {
     configurations = ['archives']
     pkg {
         //注意：这里的repo值必须要和你创建Maven仓库的时候的名字一样
-        repo = "LZP"
+        repo = "lzp"
         //发布到JCenter上的项目名字
         name = libName
         //项目描述
-        desc = 'Input text with fireworks'
+        desc = 'Modularization'
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
