@@ -39,8 +39,7 @@ public final class ImmersiveStatusBarHelper {
             }
             //设置setFitsSystemWindows(true)后，系统会为布局设置一个padding，为DecoreView添加一个根statusbar相同高度的view，填充这块
             ImmersiveStatusBarView statusBarView = new ImmersiveStatusBarView(activity, color);
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SystemUIUtil.getStatusbarHeight(activity));
-            ((ViewGroup) activity.getWindow().getDecorView()).addView(statusBarView, 0, params);
+            ((ViewGroup) activity.getWindow().getDecorView()).addView(statusBarView, 0);
         }
     }
 }
