@@ -25,6 +25,11 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected boolean immersiveStatusBarEnabled() {
+        return true;
+    }
+
     private void test() {
         IMode1 api1 = ((ApiServiceManager) MyApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).getApiService(IMode1.class);
         Log.e("Test", api1.getMode1Name());

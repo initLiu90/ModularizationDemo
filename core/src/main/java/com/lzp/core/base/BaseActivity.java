@@ -2,13 +2,16 @@ package com.lzp.core.base;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.lzp.core.AppRuntime;
+import com.lzp.library.util.ImmersiveStatusBarHelper;
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected BaseApplication mApp;
@@ -16,16 +19,37 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (enableImmersiveStatusBar()) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
         super.onCreate(savedInstanceState);
         mApp = BaseApplication.getApplication();
         mRuntime = mApp.getAppRuntime();
         mApp.addBaseActivity(this);
     }
 
-    protected boolean enableImmersiveStatusBar() {
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        if (immersiveStatusBarEnabled()) {
+            ImmersiveStatusBarHelper.enableImmersiveStatusBar(this, Color.RED);
+        }
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        if (immersiveStatusBarEnabled()) {
+            ImmersiveStatusBarHelper.enableImmersiveStatusBar(this, Color.RED);
+        }
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+        if (immersiveStatusBarEnabled()) {
+            ImmersiveStatusBarHelper.enableImmersiveStatusBar(this, Color.RED);
+        }
+    }
+
+    protected boolean immersiveStatusBarEnabled() {
         return false;
     }
 
@@ -40,6 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
+
     /**
      * use {@link BaseActivity#getSupportFragmentManager BaseActivity.getSupportFragmentManager()} instead
      *
