@@ -27,11 +27,11 @@ public class TaskManagerImpl implements TaskManager {
         _flatTasks(task, task.getDepends());
     }
 
-    private void _flatTasks(Task task, Task[] tasks) {
-        if (tasks == null || tasks.length == 0) {
+    private void _flatTasks(Task task, Task[] depends) {
+        if (depends == null || depends.length == 0) {
             return;
         }
-        for (Task t : tasks) {
+        for (Task t : depends) {
             //查找子节点的依赖集在父节点依赖集中存在的task
             Task[] repeatedTasks = task.filterDepends(t.getDepends());
             if (repeatedTasks != null && repeatedTasks.length > 0) {
@@ -51,7 +51,27 @@ public class TaskManagerImpl implements TaskManager {
     }
 
     @Override
-    public void createTaskTree() {
+    public void exec(Task task) {
+        if (task.hasDepend()) {
+            //exec depend tasks
+            Task[] depends = task.getDepends();
+            for (Task d : depends) {
+                if (!d.complete()) {
+                    exec(d);
+                }
+            }
+            //exec the dest task
+            task.exec();
+        } else {
+            task.exec();
+        }
+    }
 
+    @Override
+    public void exec() {
+        if (mTasks == null || mTasks.size() == 0) return;
+        for (Task task : mTasks) {
+            exec(task);
+        }
     }
 }

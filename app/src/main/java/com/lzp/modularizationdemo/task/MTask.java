@@ -1,11 +1,14 @@
 package com.lzp.modularizationdemo.task;
 
+import android.support.annotation.CallSuper;
 import android.support.v4.util.ArraySet;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class MTask implements Task {
+    protected boolean mCompleted = false;
     private ArraySet<Task> mDepends = new ArraySet<>();
 
     @Override
@@ -43,6 +46,24 @@ public abstract class MTask implements Task {
         }
         Task[] result = new Task[list.size()];
         return list.toArray(result);
+    }
+
+    @Override
+    public boolean hasDepend() {
+        return !(mDepends == null || mDepends.size() == 0);
+    }
+
+    @Override
+    public boolean complete() {
+        return mCompleted;
+    }
+
+    @Override
+    public void exec() {
+        if (!mCompleted) {
+            Log.e("Test", name() + " exec");
+            mCompleted = true;
+        }
     }
 
     @Override

@@ -26,7 +26,14 @@ public interface TaskManager {
     Task[] getTasks();
 
     /**
-     * 创建Task树
+     * 执行Task
+     *
+     * @param task
      */
-    void createTaskTree();
+    void exec(Task task);
+
+    /**
+     * 执行所有的Task
+     */
+    void exec();
 }
