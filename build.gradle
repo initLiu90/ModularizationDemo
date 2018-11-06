@@ -3,18 +3,19 @@
 buildscript {
 
     repositories {
+        mavenCentral()
         google()
         jcenter()
         flatDir name: 'modularization', dir: './Maven/modularization/libs'
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.1'
-        classpath 'com.lzp.modularization:modulePlugin:1.0.0'
+        classpath 'com.lzp.modularization:modulePlugin:1.0.1'
+        classpath 'org.javassist:javassist:3.24.0-GA'
 
         //加上这两行
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-
+//        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+//        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -23,6 +24,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
     }

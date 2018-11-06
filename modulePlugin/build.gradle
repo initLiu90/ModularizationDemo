@@ -1,9 +1,9 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
-uploadArchives{
-    repositories{
-        flatDir{
+uploadArchives {
+    repositories {
+        flatDir {
             name "moduleplugin"
             dir "../Maven/modularization/libs"
         }
@@ -11,9 +11,11 @@ uploadArchives{
 }
 
 group = "com.lzp.modularization"//project属性
-version = '1.0.0'
+version = '1.0.1'
 
 dependencies {
     implementation gradleApi()//gradle sdk
     implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:3.1.1'
+    implementation 'org.javassist:javassist:3.24.0-GA'
 }

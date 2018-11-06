@@ -81,5 +81,6 @@ public class MainActivity extends BaseActivity {
         for (Task task : taskManager.getTasks()) {
             Log.e("Test", task.toString());
         }
+        taskManager.exec();
     }
 }

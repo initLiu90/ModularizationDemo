@@ -1,15 +1,21 @@
 package com.lzp.moduleplugin
 
+import com.android.build.gradle.AppExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-
-import java.util.regex.Pattern;
 
 class Modularization implements Plugin<Project> {
     @Override
     void apply(Project project) {
+        registerTransform(project)
         addDependecys(project)
 //        generateLifecycleCode(project)
+    }
+
+    private void registerTransform(Project project) {
+        def android = project.getExtensions().getByType(AppExtension)
+        def mTaskTransform = new MTaskTransform();
+        android.registerTransform(mTaskTransform)
     }
 
     private void addDependecys(Project project) {
@@ -44,7 +50,6 @@ class Modularization implements Plugin<Project> {
             }
         }
     }
-
 
 //    private void generateLifecycleCode(Project project) {
 //        project.afterEvaluate {
