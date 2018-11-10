@@ -1,7 +1,15 @@
 package com.lzp.module1;
 
-import com.lzp.annotation.MTask;
+import com.lzp.core.mtask.AbsMTask;
 
-@MTask(dependsOn = {"Task0", "Task1"})
-public class MT_module1 {
+public class MT_module1 extends AbsMTask {
+    @Override
+    public String name() {
+        return MT_module1.class.getName();
+    }
+
+    @Override
+    public void config() {
+        dependsOn("com.lzp.module2.MT_module2");
+    }
 }

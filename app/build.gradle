@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.lzp.moduleplugin'
 
+module {
+    enter 'com.lzp.modularizationdemo.MyApplication'
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {

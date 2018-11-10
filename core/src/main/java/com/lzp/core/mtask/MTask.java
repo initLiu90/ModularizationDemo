@@ -1,6 +1,6 @@
-package com.lzp.modularizationdemo.task;
+package com.lzp.core.mtask;
 
-public interface Task {
+public interface MTask {
     /**
      * Task名
      *
@@ -13,7 +13,7 @@ public interface Task {
      *
      * @param tasks
      */
-    void dependOn(Task... tasks);
+    void dependsOn(String... tasks);
 
     /**
      * 删除依赖
@@ -21,21 +21,21 @@ public interface Task {
      * @param tasks
      * @return
      */
-    boolean remove(Task... tasks);
+    boolean remove(String... tasks);
 
     /**
      * 获取依赖
      *
      * @return
      */
-    Task[] getDepends();
+    String[] getDepends();
 
     /**
      * 是否有依赖的Task
      *
      * @return
      */
-    boolean hasDepend();
+    boolean hasDepends();
 
     /**
      * 在依赖集中查找传入的Task是否存在
@@ -43,7 +43,13 @@ public interface Task {
      * @param tasks
      * @return Task依赖集中存在的task
      */
-    Task[] filterDepends(Task... tasks);
+    String[] filterDepends(String... tasks);
+
+    /**
+     * 设置Task的依赖
+     * the method dependOn must be call in this method
+     */
+    void config();
 
     /**
      * 执行task

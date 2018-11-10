@@ -33,5 +33,4 @@ android {
 dependencies {
     implementation project(':core')
     implementation project(':api')
-    implementation files('libs/annotation.jar')
 }

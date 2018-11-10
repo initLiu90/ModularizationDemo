@@ -15,6 +15,7 @@ public class AppRuntime {
     public static final int LIFECYCLE = 0;
     public static final int API = LIFECYCLE + 1;
     public static final int NETWORK = API + 1;
+    public static final int MTASK = NETWORK + 1;
 
     private final ArrayMap<Integer, Manager> managers = new ArrayMap<>();
     private List<BusinessObserver> mObservers = new ArrayList<>();
@@ -38,6 +39,9 @@ public class AppRuntime {
                 break;
             case NETWORK:
                 manager = new NetworkManagerImpl();
+                break;
+            case MTASK:
+                manager = new MTaskManagerImpl();
                 break;
         }
         if (manager != null) {

@@ -7,6 +7,7 @@ import org.gradle.api.Project
 class Modularization implements Plugin<Project> {
     @Override
     void apply(Project project) {
+        project.extensions.create("module", MExtension)
         registerTransform(project)
         addDependecys(project)
 //        generateLifecycleCode(project)
@@ -14,7 +15,7 @@ class Modularization implements Plugin<Project> {
 
     private void registerTransform(Project project) {
         def android = project.getExtensions().getByType(AppExtension)
-        def mTaskTransform = new MTaskTransform();
+        def mTaskTransform = new MTaskTransform(project)
         android.registerTransform(mTaskTransform)
     }
 
