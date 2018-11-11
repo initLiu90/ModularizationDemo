@@ -11,7 +11,7 @@ public class Module2Lifecycle implements IModuleLifecycle {
     @Override
     public void onCreate() {
         ((ApiServiceManager) BaseApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).addApiService(IMode2.class, Mode2ServiceImpl.class);
-        ((MTaskManager)BaseApplication.getApplication().getAppRuntime().getManager(AppRuntime.MTASK)).collectTasks(new MT_module2());
+        ((MTaskManager) BaseApplication.getApplication().getAppRuntime().getManager(AppRuntime.MTASK)).collectTasks(new MT_module0(), new MT_module4(), new MT_module5());
     }
 
     @Override
