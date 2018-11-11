@@ -21,6 +21,26 @@ class MTaskManagerImpl implements MTaskManager {
     }
 
     @Override
+    public int removeTasks(MTask... tasks) {
+        if (mTasks == null || mTasks.size() == 0 || tasks == null || tasks.length == 0) return 0;
+        int count = 0;
+        for (MTask task : tasks) {
+            if (mTasks.remove(task.name()) != null) count++;
+        }
+        return count;
+    }
+
+    @Override
+    public int removeTasks(String... tasks) {
+        if (mTasks == null || mTasks.size() == 0 || tasks == null || tasks.length == 0) return 0;
+        int count = 0;
+        for (String task : tasks) {
+            if (mTasks.remove(task) != null) count++;
+        }
+        return count;
+    }
+
+    @Override
     public void configTasks() {
         if (mTasks == null || mTasks.size() == 0) return;
         for (MTask task : mTasks.values()) {
@@ -104,6 +124,8 @@ class MTaskManagerImpl implements MTaskManager {
 
     @Override
     public void destry() {
-
+        if (mTasks != null) {
+            mTasks.clear();
+        }
     }
 }

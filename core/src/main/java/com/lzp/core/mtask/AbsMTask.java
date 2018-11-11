@@ -6,30 +6,46 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import io.reactivex.Scheduler;
+
 public abstract class AbsMTask implements MTask {
-    protected boolean mCompleted = false;
+    /**
+     * Indicate the task is executed
+     */
+    protected volatile boolean mCompleted = false;
     private ArraySet<String> mDepends = new ArraySet<>();
+    private Scheduler mScheduler;
 
     @Override
-    public void dependsOn(String... tasks) {
+    public final void setScheduler(Scheduler scheduler) {
+        mScheduler = scheduler;
+    }
+
+    @Override
+    public final Scheduler getScheduler() {
+        return mScheduler;
+    }
+
+    @Override
+    public final void dependsOn(String... tasks) {
         if (tasks == null || tasks.length == 0) return;
         mDepends.addAll(Arrays.asList(tasks));
     }
 
     @Override
-    public boolean remove(String... tasks) {
+    public final boolean remove(String... tasks) {
         return mDepends.removeAll(Arrays.asList(tasks));
     }
 
     @Override
-    public String[] getDepends() {
+    public final String[] getDepends() {
         String[] mTasks = new String[mDepends.size()];
         mDepends.toArray(mTasks);
         return mTasks;
     }
 
     @Override
-    public String[] filterDepends(String... tasks) {
+    public final String[] filterDepends(String... tasks) {
         if (tasks == null || tasks.length == 0) {
             return null;
         }
@@ -44,7 +60,7 @@ public abstract class AbsMTask implements MTask {
     }
 
     @Override
-    public boolean hasDepends() {
+    public final boolean hasDepends() {
         return !(mDepends == null || mDepends.size() == 0);
     }
 
@@ -53,6 +69,17 @@ public abstract class AbsMTask implements MTask {
         return mCompleted;
     }
 
+    /**
+     * Task can add depends by override this method
+     */
+    @Override
+    public void config() {
+        //Do noting
+    }
+
+    /**
+     * If this Task is not completed execute this Task and set completed to true
+     */
     @Override
     public void exec() {
         if (!mCompleted) {
@@ -62,12 +89,12 @@ public abstract class AbsMTask implements MTask {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return name().hashCode();
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (obj instanceof MTask) {
             MTask task = (MTask) obj;
             return this.name().equals(task.name());
@@ -76,7 +103,7 @@ public abstract class AbsMTask implements MTask {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         StringBuilder sb = new StringBuilder(name() + "->[");
         if (mDepends.size() <= 0) {
             return sb.append("]").toString();

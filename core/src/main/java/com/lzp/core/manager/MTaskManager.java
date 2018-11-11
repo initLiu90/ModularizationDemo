@@ -10,6 +10,20 @@ public interface MTaskManager extends Manager{
     void collectTasks(MTask... mTasks);
 
     /**
+     * 删除task
+     * @param tasks
+     * @return 删除了多少了task
+     */
+    int removeTasks(MTask... tasks);
+
+    /**
+     * 删除task
+     * @param tasks
+     * @return 删除了多少了task
+     */
+    int removeTasks(String... tasks);
+
+    /**
      * 调用MTask的config方法
      */
     void configTasks();

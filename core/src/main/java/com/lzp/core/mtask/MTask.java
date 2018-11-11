@@ -1,5 +1,7 @@
 package com.lzp.core.mtask;
 
+import io.reactivex.Scheduler;
+
 public interface MTask {
     /**
      * Task名
@@ -14,6 +16,16 @@ public interface MTask {
      * @param tasks
      */
     void dependsOn(String... tasks);
+
+    /**
+     * 设置MTask执行的线程
+     */
+    void setScheduler(Scheduler scheduler);
+
+    /**
+     * 获取MTask执行的线程
+     */
+    Scheduler getScheduler();
 
     /**
      * 删除依赖
