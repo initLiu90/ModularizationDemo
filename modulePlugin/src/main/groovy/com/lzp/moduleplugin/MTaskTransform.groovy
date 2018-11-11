@@ -47,11 +47,11 @@ class MTaskTransform extends Transform {
         def enter = project.extensions.getByType(MExtension).enter
         def fullCNames = TransformUtil.getClasses(transformInvocation, pool)
 
-        def mTasks = []
+        def lifecycles = []
         fullCNames.each { cname ->
             CtClass cc = pool.get(cname)
-            if (isMTask(cc)) {//如果是MTask
-                mTasks.add(cc)
+            if (isModuleLifecycle(cc)) {//如果是实现了IModuleLifecycle接口的类
+                lifecycles.add(cc)
             }
         }
 
@@ -74,7 +74,7 @@ class MTaskTransform extends Transform {
                         def fullClzName = filePath.replace('\\', '.').replace('/', '.')
                         if (fullClzName.equals(enter)) {
 //                            println('fullClzName=' + fullClzName)
-                            injectEnter(mTasks, enter, directoryInput.file.absolutePath)
+                            injectEnter(lifecycles, enter, directoryInput.file.absolutePath)
                         }
                     }
                 }
@@ -84,37 +84,34 @@ class MTaskTransform extends Transform {
         }
     }
 
-    private boolean isMTask(CtClass ctClass) {
-        if (ctClass.getSuperclass().name.equals("com.lzp.core.mtask.AbsMTask")) {
-            return true
+    private boolean isModuleLifecycle(CtClass ctClass) {
+        for (def cc : ctClass.getInterfaces()) {
+            if (cc.name.equals("com.lzp.core.module.IModuleLifecycle")) {
+                return true
+            }
         }
         return false
     }
 
-    private void injectEnter(List<CtClass> tasks, String enter, String path) {
+    private void injectEnter(List<CtClass> lifecycles, String enter, String path) {
         def ccEnter = pool.get(enter)
         if (ccEnter.isFrozen()) {
             ccEnter.defrost()
         }
 
-        def sb = new StringBuilder("com.lzp.core.manager.MTaskManager manager = (com.lzp.core.manager.MTaskManager) getApplication().getAppRuntime().getManager(com.lzp.core.AppRuntime.MTASK);")
-        tasks.each { ccTask ->
-            sb.append("com.lzp.core.mtask.MTask ${ccTask.simpleName} = new ${ccTask.name}();")
+        def code = new StringBuilder();
+        lifecycles.each {
+            code.append("((com.lzp.core.manager.LifecycleManager) getAppRuntime().getManager(com.lzp.core.AppRuntime.LIFECYCLE)).registerModule(\"" + it.name + "\");")
         }
-        sb.append("manager.collectTasks(new com.lzp.core.mtask.MTask[]{")
-        tasks.each { ccTask ->
-            sb.append(ccTask.simpleName).append(",")
-        }
-        sb.delete(sb.length() - 1, sb.length())
-        sb.append("});")
 
-        sb.append("manager.configTasks();")
-        sb.append("manager.flatTasks();")
-        sb.append("manager.exec();")
+        code.append("com.lzp.core.manager.MTaskManager manager = (com.lzp.core.manager.MTaskManager) getApplication().getAppRuntime().getManager(com.lzp.core.AppRuntime.MTASK);")
+        code.append("manager.configTasks();")
+        code.append("manager.flatTasks();")
+        code.append("manager.exec();")
 
         CtMethod cmOnCreate = ccEnter.getDeclaredMethod("onCreate")
-        println('code=' + sb.toString())
-        cmOnCreate.insertAfter(sb.toString())
+        println('code=' + code.toString())
+        cmOnCreate.insertAfter(code.toString())
         ccEnter.writeFile(path)
         ccEnter.detach()
     }

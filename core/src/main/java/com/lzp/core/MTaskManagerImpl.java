@@ -9,7 +9,7 @@ class MTaskManagerImpl implements MTaskManager {
     private ArrayMap<String, MTask> mTasks;
 
     @Override
-    public void collectTasks(MTask[] tasks) {
+    public void collectTasks(MTask... tasks) {
         if (mTasks == null) {
             mTasks = new ArrayMap<>();
         }

@@ -7,7 +7,7 @@ public interface MTaskManager extends Manager{
     /**
      * 将MTasks添加到MTaskManager
      */
-    void collectTasks(MTask[] mTasks);
+    void collectTasks(MTask... mTasks);
 
     /**
      * 调用MTask的config方法
