@@ -4,6 +4,7 @@ import android.support.v4.util.ArrayMap;
 
 import com.lzp.core.manager.MTaskManager;
 import com.lzp.core.mtask.MTask;
+import com.lzp.library.util.MLog;
 
 class MTaskManagerImpl implements MTaskManager {
     private ArrayMap<String, MTask> mTasks;
@@ -44,12 +45,16 @@ class MTaskManagerImpl implements MTaskManager {
         if (depends == null || depends.length == 0) return;
         for (String name : depends) {
             MTask tmp = getMTask(name);
-            //查找子节点的依赖集在父节点依赖集中存在的task
-            String[] repeatedTasks = task.filterDepends(tmp.getDepends());
-            if (repeatedTasks != null && repeatedTasks.length > 0) {
-                task.remove(repeatedTasks);
+            if (tmp == null) {
+                MLog.e("Test", "MTaskManagerImpl", "_flatTasks could not find mtask:" + name + " from MTaskManager");
+            } else {
+                //查找子节点的依赖集在父节点依赖集中存在的task
+                String[] repeatedTasks = task.filterDepends(tmp.getDepends());
+                if (repeatedTasks != null && repeatedTasks.length > 0) {
+                    task.remove(repeatedTasks);
+                }
+                _flatTasks(tmp, tmp.getDepends());
             }
-            _flatTasks(tmp, tmp.getDepends());
         }
     }
 
@@ -74,8 +79,12 @@ class MTaskManagerImpl implements MTaskManager {
             String[] depends = task.getDepends();
             for (String d : depends) {
                 MTask t = getMTask(d);
-                if (!t.complete()) {
-                    exec(t);
+                if (t == null) {
+                    MLog.e("Test", "MTaskManagerImpl", "exec could not find mtask:" + d + " from MTaskManager");
+                } else {
+                    if (!t.complete()) {
+                        exec(t);
+                    }
                 }
             }
             //exec the dest task
