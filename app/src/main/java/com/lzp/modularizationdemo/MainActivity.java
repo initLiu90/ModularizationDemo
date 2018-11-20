@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity {
 
     private void test() {
 //        IMode1 api1 = ((ApiServiceManager) MyApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).getApiService(IMode1.class);
-//        Log.e("Test", api1.getMode1Name());
 //
 //        IMode2 api2 = ((ApiServiceManager) MyApplication.getApplication().getAppRuntime().getManager(AppRuntime.API)).getApiService(IMode2.class);
 //        Log.e("Test", api2.getSchool());
