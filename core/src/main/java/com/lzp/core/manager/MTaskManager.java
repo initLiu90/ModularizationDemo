@@ -1,6 +1,7 @@
 package com.lzp.core.manager;
 
 import com.lzp.core.mtask.MTask;
+import com.lzp.core.mtask.MTaskList;
 
 public interface MTaskManager extends Manager{
 
@@ -53,14 +54,7 @@ public interface MTaskManager extends Manager{
     MTask getMTask(String taskName);
 
     /**
-     * 执行Task
-     *
-     * @param task
-     */
-    void exec(MTask task);
-
-    /**
      * 执行所有的Task
      */
-    void exec();
+    MTaskList exec();
 }

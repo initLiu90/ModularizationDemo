@@ -2,7 +2,7 @@ package com.lzp.core.mtask;
 
 import io.reactivex.Scheduler;
 
-public interface MTask {
+public interface MTask extends Runnable{
     /**
      * Task名
      *

@@ -1,7 +1,6 @@
 package com.lzp.core.mtask;
 
 import android.support.v4.util.ArraySet;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,9 +80,9 @@ public abstract class AbsMTask implements MTask {
      * If this Task is not completed execute this Task and set completed to true
      */
     @Override
-    public void exec() {
+    final public void exec() {
         if (!mCompleted) {
-            Log.e("Test", name() + " exec");
+            run();
             mCompleted = true;
         }
     }

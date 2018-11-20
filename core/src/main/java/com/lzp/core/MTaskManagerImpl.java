@@ -1,10 +1,17 @@
 package com.lzp.core;
 
 import android.support.v4.util.ArrayMap;
+import android.support.v4.util.ArraySet;
+import android.util.Log;
 
 import com.lzp.core.manager.MTaskManager;
 import com.lzp.core.mtask.MTask;
+import com.lzp.core.mtask.MTaskList;
 import com.lzp.library.util.MLog;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 class MTaskManagerImpl implements MTaskManager {
     private ArrayMap<String, MTask> mTasks;
@@ -92,8 +99,7 @@ class MTaskManagerImpl implements MTaskManager {
         return mTasks.values().toArray(rest);
     }
 
-    @Override
-    public void exec(MTask task) {
+    private void exec(MTask task, MTaskList taskList) {
         if (task.hasDepends()) {
             //exec depend tasks
             String[] depends = task.getDepends();
@@ -103,23 +109,27 @@ class MTaskManagerImpl implements MTaskManager {
                     MLog.e("Test", "MTaskManagerImpl", "exec could not find mtask:" + d + " from MTaskManager");
                 } else {
                     if (!t.complete()) {
-                        exec(t);
+                        exec(t, taskList);
                     }
                 }
             }
             //exec the dest task
-            task.exec();
+//            task.exec();
+            taskList.insert(task);
         } else {
-            task.exec();
+//            task.exec();
+            taskList.insert(task);
         }
     }
 
     @Override
-    public void exec() {
-        if (mTasks == null || mTasks.size() == 0) return;
+    public MTaskList exec() {
+        if (mTasks == null || mTasks.size() == 0) return null;
+        MTaskList taskList = new MTaskList();
         for (MTask task : mTasks.values()) {
-            exec(task);
+            exec(task, taskList);
         }
+        return taskList;
     }
 
     @Override
