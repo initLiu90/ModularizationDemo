@@ -107,7 +107,8 @@ class MTaskTransform extends Transform {
         code.append("com.lzp.core.manager.MTaskManager manager = (com.lzp.core.manager.MTaskManager) getApplication().getAppRuntime().getManager(com.lzp.core.AppRuntime.MTASK);")
         code.append("manager.configTasks();")
         code.append("manager.flatTasks();")
-        code.append("manager.exec();")
+        code.append("com.lzp.core.mtask.MTaskList taskList = manager.getTaskList();")
+        code.append("taskList.exec();")
 
         CtMethod cmOnCreate = ccEnter.getDeclaredMethod("onCreate")
         println('code=' + code.toString())

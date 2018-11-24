@@ -50,6 +50,13 @@ public interface MTask extends Runnable{
     boolean hasDepends();
 
     /**
+     * 判断是否依赖此task
+     * @param task
+     * @return
+     */
+    boolean isDependOn(String task);
+
+    /**
      * 在依赖集中查找传入的Task是否存在
      *
      * @param tasks

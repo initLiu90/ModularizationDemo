@@ -99,7 +99,7 @@ class MTaskManagerImpl implements MTaskManager {
         return mTasks.values().toArray(rest);
     }
 
-    private void exec(MTask task, MTaskList taskList) {
+    private void _getTaskList(MTask task, MTaskList taskList) {
         if (task.hasDepends()) {
             //exec depend tasks
             String[] depends = task.getDepends();
@@ -108,26 +108,21 @@ class MTaskManagerImpl implements MTaskManager {
                 if (t == null) {
                     MLog.e("Test", "MTaskManagerImpl", "exec could not find mtask:" + d + " from MTaskManager");
                 } else {
-                    if (!t.complete()) {
-                        exec(t, taskList);
-                    }
+                    _getTaskList(t, taskList);
                 }
             }
-            //exec the dest task
-//            task.exec();
             taskList.insert(task);
         } else {
-//            task.exec();
             taskList.insert(task);
         }
     }
 
     @Override
-    public MTaskList exec() {
+    public MTaskList getTaskList() {
         if (mTasks == null || mTasks.size() == 0) return null;
         MTaskList taskList = new MTaskList();
         for (MTask task : mTasks.values()) {
-            exec(task, taskList);
+            _getTaskList(task, taskList);
         }
         return taskList;
     }

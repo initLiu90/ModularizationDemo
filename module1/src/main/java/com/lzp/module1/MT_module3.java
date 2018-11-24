@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.lzp.core.mtask.AbsMTask;
 
+import io.reactivex.schedulers.Schedulers;
+
 public class MT_module3 extends AbsMTask {
     @Override
     public String name() {
@@ -12,11 +14,18 @@ public class MT_module3 extends AbsMTask {
 
     @Override
     public void config() {
-        dependsOn("com.lzp.module2.MT_module0");
+        setScheduler(Schedulers.io());
+//        dependsOn("com.lzp.module2.MT_module0");
     }
 
     @Override
     public void run() {
-        Log.e("Test", name() + " exec");
+        Log.e("Test", name() + " exec on thread:" + Thread.currentThread().getName());
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+
+        }
+        Log.e("Test", name() + " exec end");
     }
 }

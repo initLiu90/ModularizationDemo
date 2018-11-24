@@ -17,6 +17,7 @@ public class MT_module4 extends AbsMTask {
 
     @Override
     public void run() {
-        Log.e("Test", name() + " exec");
+        Log.e("Test", name() + " exec on thread:" + Thread.currentThread().getName());
+        Log.e("Test", name() + " exec end");
     }
 }

@@ -54,7 +54,8 @@ public interface MTaskManager extends Manager{
     MTask getMTask(String taskName);
 
     /**
-     * 执行所有的Task
+     * 获取Task执行队列
+     * 以链表的数据结构进行表示
      */
-    MTaskList exec();
+    MTaskList getTaskList();
 }

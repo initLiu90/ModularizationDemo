@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public abstract class AbsMTask implements MTask {
     /**
@@ -22,7 +23,7 @@ public abstract class AbsMTask implements MTask {
 
     @Override
     public final Scheduler getScheduler() {
-        return mScheduler;
+        return mScheduler == null ? AndroidSchedulers.mainThread() : mScheduler;
     }
 
     @Override
@@ -61,6 +62,11 @@ public abstract class AbsMTask implements MTask {
     @Override
     public final boolean hasDepends() {
         return !(mDepends == null || mDepends.size() == 0);
+    }
+
+    @Override
+    public boolean isDependOn(String task) {
+        return mDepends.contains(task);
     }
 
     @Override

@@ -20,6 +20,12 @@ public class MT_module1 extends AbsMTask {
 
     @Override
     public void run() {
-        Log.e("Test", name() + " exec");
+        Log.e("Test", name() + " exec on thread:" + Thread.currentThread().getName());
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+
+        }
+        Log.e("Test", name() + " exec end");
     }
 }

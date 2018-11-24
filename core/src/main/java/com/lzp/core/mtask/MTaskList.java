@@ -20,7 +20,7 @@ public class MTaskList {
         }
     }
 
-    public MTask pop() {
+    private MTask pop() {
         if (root == null) return null;
         MTask result = root.value;
         Node del = root;
@@ -29,13 +29,35 @@ public class MTaskList {
         return result;
     }
 
+    public void exec() {
+        _exec(root);
+    }
+
+    private void _exec(final Node cur) {
+        if (cur != null) {
+            //下一个task跟当前task有直接的依赖关系，下一次task需要等到这个task执行完之后才能执行
+            if (cur.next != null && cur.next.value.isDependOn(cur.value.name())) {
+                cur.value.getScheduler().scheduleDirect(new Runnable() {
+                    @Override
+                    public void run() {
+                        cur.value.exec();
+                        _exec(cur.next);
+                    }
+                });
+            } else {
+                cur.value.getScheduler().scheduleDirect(cur.value);
+                _exec(cur.next);
+            }
+        }
+    }
+
     private static class Node {
+        private MTask value;
+        private Node next;
+
         public Node(MTask task) {
             this.value = task;
             this.next = null;
         }
-
-        private MTask value;
-        Node next;
     }
 }
