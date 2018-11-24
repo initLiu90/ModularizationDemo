@@ -3,18 +3,27 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 27
 
-
+    signingConfigs {
+        release {
+            keyAlias 'test'
+            keyPassword 'test123'
+            storeFile file('release.jks')
+            storePassword 'test123'
+        }
+    }
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        consumerProguardFiles 'proguard-rules.pro'
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -47,7 +47,7 @@ public abstract class BaseApplication extends Application {
      *
      * @return
      */
-    public abstract AppRuntime createAppRuntime();
+    protected abstract AppRuntime createAppRuntime();
 
     public AppRuntime getAppRuntime() {
         return mAppRuntime;
