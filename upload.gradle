@@ -1,84 +1,42 @@
-//添加这两行
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
-//项目主页
-def siteUrl = 'https://github.com'
-//项目的git地址
-def gitUrl = 'https://github.com.git'
-//发布到JCenter上的项目名字
-def libName = "Modularization"
+publishing {
+    repositories {
+        maven {
+            name = 'localRepo'
+            url = "file://~/Workspace/Test/repo"
+        }
+    }
+    publications {
+        aar(MavenPublication) {
+            groupId "com.lzp.modularization"
+            version = "1.0.0"
+            artifactId "plugin"
 
-group = "com.lzp.modularization"
-// 版本号，下次更新是只需要更改版本号即可
-version = "1.0.0"
-//上面配置后上传至JCenter后的编译路径是这样的： compile 'me.songning.CircleView:library:1.0.0'
+            // Tell maven to prepare the generated "*.aar" file for publishing
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
 
-//生成源文件
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-//    from sourceSets.main.groovy.srcDirs
-    classifier = 'sources'
-}
+            //The publication doesn't know about our dependencies, so we have to manually add them to the pom
+            pom.withXml {
+                // for dependencies and exclusions
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.api.allDependencies.withType(ModuleDependency) { ModuleDependency dp ->
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dp.group)
+                    dependencyNode.appendNode('artifactId', dp.name)
+                    dependencyNode.appendNode('version', dp.version)
 
-//上传到JCenter所需要的源码文件
-artifacts {
-    archives sourcesJar
-}
-
-// 配置maven库，生成POM.xml文件
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                //项目描述，随意填
-                name 'modularization'
-//                url siteUrl
-                licenses {
-                    license {
-                        //开源协议
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    // for exclusions
+                    if (dp.excludeRules.size() > 0) {
+                        def exclusions = dependencyNode.appendNode('exclusions')
+                        dp.excludeRules.each { ExcludeRule ex ->
+                            def exclusion = exclusions.appendNode('exclusion')
+                            exclusion.appendNode('groupId', ex.group)
+                            exclusion.appendNode('artifactId', ex.module)
+                        }
                     }
-                }
-                developers {
-                    developer {
-                        //开发者的个人信息
-                        id 'initliu'
-                        name 'initliu'
-                        email '787643875@qq.com'
-                    }
-                }
-                scm {
-//                    connection gitUrl
-//                    developerConnection gitUrl
-//                    url siteUrl
                 }
             }
         }
-    }
-}
-
-//上传到JCenter
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")    //读取 local.properties 文件里面的 bintray.user
-    key = properties.getProperty("bintray.apikey")   //读取 local.properties 文件里面的 bintray.apikey
-    configurations = ['archives']
-    pkg {
-        //注意：这里的repo值必须要和你创建Maven仓库的时候的名字一样
-        repo = "lzp"
-        //发布到JCenter上的项目名字
-        name = libName
-        //项目描述
-        desc = 'Modularization'
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
     }
 }
